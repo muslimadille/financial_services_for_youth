@@ -80,12 +80,26 @@ class _ServiceDetailsScreenState extends State<ServiceDetailsScreen> {
                         Icon(Icons.location_on,color: C.BLUE_1,size: D.default_20,),
                         Expanded(child: Text(widget.providerModel.address??"",style:S.h5(color: C.GREY_1) ,))
                       ],),
+                      SizedBox(height: D.default_5,),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                         Icon(Icons.phone_android,color: C.BLUE_1,size: D.default_20,),
                         Expanded(child: Text(widget.providerModel.phone??"",style:S.h5(color: C.GREY_1)) ,)
                       ],),
+                      SizedBox(height: D.default_5,),
+                      (widget.providerModel.website??"").isNotEmpty?
+                          InkWell(
+                            onTap: (){
+                              openUrl(widget.providerModel.website??"");
+                            },
+                            child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.language,color: C.BLUE_1,size: D.default_20,),
+                              Expanded(child: Text(widget.providerModel.website??"",style:S.h5(color: C.GREY_1)) ,)
+                            ],),):Container(),
+                      SizedBox(height: D.default_5,),
                     ],)),
 
 
@@ -252,6 +266,14 @@ List<Widget> itemsList(){
   }
 
   }
+  Future<void> openUrl(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        await Fluttertoast.showToast(msg: "الموقع غير متاح");
+      }
+    }
+
   String getLatLng(){
     String mapUrl = widget.providerModel.location??"";
     if(mapUrl.contains("/@")){
